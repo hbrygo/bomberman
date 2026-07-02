@@ -52,7 +52,24 @@ enum class Grade {
     F
 };
 
-class Son {
+class AEntity {
+    protected:
+        int _x;
+        int _y;
+    
+    public:
+        AEntity();
+        virtual ~AEntity();
+        int get_x();
+        int get_y();
+        int set_x(int x);
+        int set_y(int y);
+        bool move(int dx, int dy);
+        bool is_alive();
+        void take_damage(int damage);
+};
+
+class Sound {
     private:
         std::string _level_music_path;
         std::string _menu_music_path;
@@ -64,8 +81,8 @@ class Son {
         bool _active;
 
     public:
-        Son();
-        ~Son();
+        Sound();
+        ~Sound();
         void play_music(std::string path);
         void stop_music();
         void set_volume(int volume);
@@ -102,13 +119,9 @@ class Save {
         void load_game(Game &game);
 };
 
-class Player {
+class Player : public AEntity {
     private:
         int _id;
-        int _x;
-        int _y;
-        int _speed;
-        int _lives;
         int _bombs;
         std::map<Inputs, int> _inputs;
         std::map<BonusType, bool> _bonuses;
@@ -133,7 +146,7 @@ class Map {
 class Game {
     private:
         Save _save;
-        // Son _musique;
+        // Sound _music;
         Player _player;
         Map _map_in_play;
         Level _level_in_play;
@@ -146,15 +159,15 @@ class Game {
         void end_game();
 };
 
-class Music {
+class MusicData {
     private:
         std::string _path;
-        float _duree;
+        float _duration;
         bool _status;
     
     public:
-        Music();
-        ~Music();
+        MusicData();
+        ~MusicData();
         void play();
         void stop();
 };
@@ -163,7 +176,7 @@ class Bonus {
     private:
         std::string _definition;
         std::string _img;
-        std::string _nom;
+        std::string _name;
         BonusType _id;
         std::time_t _duration;
         bool _unlocked;
