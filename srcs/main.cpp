@@ -42,14 +42,13 @@ int main(int argc, char **argv) {
         input.setup();
 
         Shader shader(kVertexShaderSrc, kFragmentShaderSrc);
-        Player player(kGridCols / 2, kGridRows / 2, kGridCols, kGridRows);
-        input.setPlayer(&player);
+        Player player(kGridCols / 2, kGridRows / 2, kGridCols, kGridRows);		// create player at given position
+        input.setPlayer(&player);												// set _player in input to this player
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
         while (!w.shouldClose()) {
             w.pollEvents();
-
             glClear(GL_COLOR_BUFFER_BIT);
             shader.use();
             player.render(shader.id());

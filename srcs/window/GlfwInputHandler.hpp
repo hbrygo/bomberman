@@ -29,7 +29,6 @@ class GlfwInputHandler {
             // GLFW_REPEAT, so holding a key doesn't fire multiple moves.
 			// if (action != GLFW_PRESS)
 				// return;
-
             switch (key) {
                 case GLFW_KEY_W: _player->move(0, -1); break;
                 case GLFW_KEY_S: _player->move(0, 1);  break;
