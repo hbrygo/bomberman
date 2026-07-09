@@ -6,6 +6,9 @@
    Grid origin (0,0) is top-left; NDC conversion happens internally
    so the rest of the game can just think in grid cells. */
 
+/* Most of this probably should exist in an entity interface if we are 
+   planning to add more */
+
 class Player {
     public:
         Player(int gridX, int gridY, int gridCols, int gridRows);

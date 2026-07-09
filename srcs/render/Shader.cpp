@@ -10,7 +10,6 @@ Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {
     glAttachShader(_program, vs);
     glAttachShader(_program, fs);
     glLinkProgram(_program);
-
     int success;
     glGetProgramiv(_program, GL_LINK_STATUS, &success);
     if (!success) {
@@ -20,7 +19,6 @@ Shader::Shader(const char* vertexSrc, const char* fragmentSrc) {
         glDeleteShader(fs);
         throw std::runtime_error(std::string("Shader link failed: ") + log);
     }
-
     glDeleteShader(vs);
     glDeleteShader(fs);
 }
