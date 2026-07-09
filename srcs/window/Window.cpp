@@ -18,8 +18,11 @@ Window::Window(int w, int h) {
         throw std::runtime_error("Failed creating window");
     }
     glfwMakeContextCurrent(window);
-    if (!gladLoadGL(glfwGetProcAddress))
+    if (!gladLoadGL(glfwGetProcAddress)) {
+        glfwDestroyWindow(window);
+        glfwTerminate();
         throw std::runtime_error("Failed to initialize GLAD");
+    }
     glfwSwapInterval(0);
 }
 
