@@ -25,16 +25,14 @@ DEPS	= $(OBJS:.o=.d)
 
 all: $(GLFW_LIB) $(NAME)
 
-$(NAME): $(OBJS) $(GLFW_LIB)
-
 $(GLFW_LIB):
 	@if [ ! -d "$(GLFW_BUILD)" ]; then \
 		cmake -S $(GLFWD) -B $(GLFW_BUILD); \
 	fi
 	cmake --build $(GLFW_BUILD)
 
-$(NAME): $(OBJS)
-	$(CC) $(FLAGS) $^ -o $@ $(INCS) $(LNKS) $(LIBS)
+$(NAME): $(OBJS) $(GLFW_LIB)
+	$(CC) $(FLAGS) $(OBJS) -o $@ $(INCS) $(LNKS) $(LIBS)
 
 $(BLDD)/%.o: %.cpp
 	@mkdir -p $(@D)
