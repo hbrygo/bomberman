@@ -2,10 +2,11 @@
 
 #include <GLFW/glfw3.h>
 #include "Window.hpp"
+#include "../entities/Player.hpp"
 
 class GlfwInputHandler {
     public:
-        GlfwInputHandler(Window& window) : _window(window){}
+        GlfwInputHandler(Window& window) : _window(window), _player(nullptr) {}
 
         void setup() {
             _window.setUserPointer(this);
@@ -15,21 +16,29 @@ class GlfwInputHandler {
             });
         }
 
+		void setPlayer(Player *player) { _player = player; }
+
         void onKey(int key, int action) {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
                 _window.close();
-			// handleKey(key, action);
-        }
+                return;
+            }
+            if (!_player)
+				return;
+            // Grid-step movement: only react to the initial press, not
+            // GLFW_REPEAT, so holding a key doesn't fire multiple moves.
+			// if (action != GLFW_PRESS)
+				// return;
 
-        void poll() {
-            GLFWwindow *win = _window.window;
-
-            if (glfwGetKey(win, GLFW_KEY_W) == GLFW_PRESS) printf("move up\n"); 
-            if (glfwGetKey(win, GLFW_KEY_S) == GLFW_PRESS) printf("move down\n"); 
-            if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS) printf("move left\n"); 
-            if (glfwGetKey(win, GLFW_KEY_D) == GLFW_PRESS) printf("move right\n"); 
+            switch (key) {
+                case GLFW_KEY_W: _player->move(0, -1); break;
+                case GLFW_KEY_S: _player->move(0, 1);  break;
+                case GLFW_KEY_A: _player->move(-1, 0); break;
+                case GLFW_KEY_D: _player->move(1, 0);  break;
+            }
         }
 
     private:
-        Window&  _window;
+        Window&		_window;
+		Player*		_player;
 };
