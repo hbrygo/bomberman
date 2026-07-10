@@ -23,4 +23,5 @@ class PlayingState : public GameState {
         Window& _window;
         Shader  _shader;
         Player  _player;
+        Player  _player2;
 };
