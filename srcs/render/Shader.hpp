@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Gl.hpp"
+#include <string>
+#include <unordered_map>
 
 /* Minimal shader program wrapper: compiles vertex + fragment sources,
    links them, and cleans up on destruction. */
@@ -15,7 +17,10 @@ class Shader {
         void         use() const;
         unsigned int id() const { return _program; }
 
+        void setUniform2f(const char* name, float x, float y) const;
     private:
+        int getUniformLocation(const std::string& name) const;
+        mutable std::unordered_map<std::string, int> _uniformCache;
         unsigned int compileStage(unsigned int type, const char* src, const char* stageName);
 
         unsigned int _program;

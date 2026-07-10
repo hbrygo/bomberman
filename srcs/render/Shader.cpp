@@ -27,6 +27,19 @@ Shader::~Shader() {
     glDeleteProgram(_program);
 }
 
+int Shader::getUniformLocation(const std::string& name) const {
+    auto it = _uniformCache.find(name);
+    if (it != _uniformCache.end())
+        return it->second;
+    int loc = glGetUniformLocation(_program, name.c_str());
+    _uniformCache.emplace(name, loc);
+    return loc;
+}
+
+void Shader::setUniform2f(const char* name, float x, float y) const {
+    glUniform2f(getUniformLocation(name), x, y);
+}
+
 unsigned int Shader::compileStage(unsigned int type, const char* src, const char* stageName) {
     unsigned int shader = glCreateShader(type);
     glShaderSource(shader, 1, &src, nullptr);

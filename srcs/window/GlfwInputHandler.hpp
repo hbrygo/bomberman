@@ -1,12 +1,22 @@
 #pragma once
 
+#include <functional>
 #include <GLFW/glfw3.h>
-#include "Window.hpp"
-#include "../entities/Player.hpp"
+#include "window/Window.hpp"
+#include "input/KeyBindings.hpp"
+#include "input/InputAction.hpp"
+
+/* Translates raw GLFW key events into abstract InputActions via
+   KeyBindings, then forwards them through a callback. Deliberately
+   knows nothing about Player, GameState, or any other concrete
+   gameplay type -- whoever sets the callback (App, in main) decides
+   what an action means. */
 
 class GlfwInputHandler {
     public:
-        GlfwInputHandler(Window& window) : _window(window), _player(nullptr) {}
+        using ActionCallback = std::function<void(InputAction)>;
+
+        GlfwInputHandler(Window& window) : _window(window) {}
 
         void setup() {
             _window.setUserPointer(this);
@@ -16,28 +26,26 @@ class GlfwInputHandler {
             });
         }
 
-		void setPlayer(Player *player) { _player = player; }
+        void setActionCallback(ActionCallback cb) { _callback = std::move(cb); }
 
-        void onKey(int key, int action) {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-                _window.close();
-                return;
-            }
-            if (!_player)
-				return;
-            // Grid-step movement: only react to the initial press, not
-            // GLFW_REPEAT, so holding a key doesn't fire multiple moves.
-			if (action != GLFW_PRESS)
-				return;
-            switch (key) {
-                case GLFW_KEY_W: _player->move(0, -1); break;
-                case GLFW_KEY_S: _player->move(0, 1);  break;
-                case GLFW_KEY_A: _player->move(-1, 0); break;
-                case GLFW_KEY_D: _player->move(1, 0);  break;
-            }
-        }
+        // Exposed so a future settings menu can rebind keys directly:
+        // input.bindings().bind(newKey, InputAction::MoveUp);
+        KeyBindings& bindings() { return _bindings; }
 
     private:
-        Window&		_window;
-		Player*		_player;
+        void onKey(int key, int action) {
+            // Discrete step per press only: ignore GLFW_REPEAT and
+            // GLFW_RELEASE so holding or releasing a key doesn't
+            // re-trigger a grid step or fire an action twice.
+            if (action != GLFW_PRESS)
+                return;
+
+            InputAction mapped;
+            if (_bindings.resolve(key, mapped) && _callback)
+                _callback(mapped);
+        }
+
+        Window&        _window;
+        KeyBindings    _bindings;
+        ActionCallback _callback;
 };

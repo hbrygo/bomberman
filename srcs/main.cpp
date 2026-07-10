@@ -1,33 +1,14 @@
 // #include <bomberman.hpp>
+#include <memory>
 #include "window/Window.hpp"
 #include "window/GlfwInputHandler.hpp"
-#include "render/Shader.hpp"
-#include "entities/Player.hpp"
+#include "render/QuadMesh.hpp"
+#include "core/App.hpp"
+#include "states/PlayingState.hpp"
 
 namespace {
     constexpr int kGridCols = 15;
     constexpr int kGridRows = 13;
-
-    const char* kVertexShaderSrc = R"glsl(
-        #version 330 core
-        layout(location = 0) in vec2 aPos;
-
-        uniform vec2 uOffset;
-        uniform vec2 uScale;
-
-        void main() {
-            gl_Position = vec4(aPos * uScale + uOffset, 0.0, 1.0);
-        }
-    )glsl";
-
-    const char* kFragmentShaderSrc = R"glsl(
-        #version 330 core
-        out vec4 FragColor;
-
-        void main() {
-            FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-        }
-    )glsl";
 }
 
 int main(int argc, char **argv) {
@@ -37,21 +18,26 @@ int main(int argc, char **argv) {
             throw std::runtime_error("Usage: ./bomberman");
         }
 
-        Window              w;
-        GlfwInputHandler    input(w);
+        Window           w;
+        GlfwInputHandler input(w);
         input.setup();
 
-        Shader shader(kVertexShaderSrc, kFragmentShaderSrc);
-        Player player(kGridCols / 2, kGridRows / 2, kGridCols, kGridRows);		// create player at given position
-        input.setPlayer(&player);												// set _player in input to this player
+        QuadMesh quadMesh; // shared by every quad-shaped entity
+
+        App app;
+        input.setActionCallback([&app](InputAction action) { app.handleAction(action); });
+
+        // Straight into gameplay for now; swap this for a
+        // MainMenuState once the menu exists.
+        app.changeState(std::make_unique<PlayingState>(w, quadMesh, kGridCols, kGridRows));
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
         while (!w.shouldClose()) {
             w.pollEvents();
+            app.update(0.0f); // placeholder until entities need real delta time
             glClear(GL_COLOR_BUFFER_BIT);
-            shader.use();
-            player.render(shader.id());
+            app.render();
             w.swapBuffers();
         }
     } catch (std::exception &e) {
