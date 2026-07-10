@@ -52,19 +52,19 @@ Read this before touching code. Learners are learning. Feel free to update, upgr
   GLFW key event
         │
         ▼
-GlfwInputHandler   (window/)  — "a key was pressed"
+GlfwInputHandler   (window/)  - "a key was pressed"
         │  resolves key -> action via KeyBindings
         ▼
-   InputAction      (input/)  — "MoveUp", "PlaceBomb", "Quit"...
+   InputAction      (input/)  - "MoveUp", "PlaceBomb", "Quit"...
         │  sent through a callback
         ▼
-       App          (core/)   — holds the ONE active screen
+       App          (core/)   - holds the ONE active screen
         │  forwards the action to it
         ▼
-   GameState        (core/)   — the active "screen"
+   GameState        (core/)   - the active "screen"
         │  e.g. PlayingState (states/)
         ▼
-  Player / entities  (entities/) — actual gameplay reacts
+  Player / entities  (entities/) - actual gameplay reacts
 ```
 
 **The rule that matters:** each arrow only knows about the box directly below it.
@@ -93,12 +93,12 @@ action *means*. Only the active `GameState` (e.g. `PlayingState`) connects
 **A new entity** (e.g. `Bomb`):
 1. Create `entities/Bomb.hpp/.cpp`, same shape as `Player` (owns transform, takes `const QuadMesh&`, has a `render()`)
 2. Create/store it from whichever `GameState` owns it (e.g. `PlayingState`)
-3. Don't give it its own VAO/VBO — reuse the shared `QuadMesh`
+3. Don't give it its own VAO/VBO, reuse the shared `QuadMesh`
 
 **A new screen** (e.g. `MainMenuState`):
 1. Create `states/MainMenuState.hpp/.cpp` implementing `GameState`
 2. Call `app.changeState(std::make_unique<MainMenuState>(...))` from wherever the transition happens (e.g. Escape from `PlayingState`, or at startup in `main.cpp`)
-3. It gets `handleAction`/`update`/`render` calls automatically — nothing else needs to change
+3. It gets `handleAction`/`update`/`render` calls automatically, nothing else needs to change
 
 ## Ground rules
 
