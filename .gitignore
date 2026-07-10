@@ -3,6 +3,5 @@ bomberman
 libs/glfw/build/
 
 *.d
-
 .vscode/
 .DS_Store
