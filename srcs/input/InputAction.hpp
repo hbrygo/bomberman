@@ -14,5 +14,6 @@ enum class InputAction {
     MoveLeftP2,
     MoveRightP2,
     PlaceBomb,
+    PlaceBombP2,
     Quit,
 };

@@ -27,7 +27,7 @@ class Window {
 			return static_cast<T*>(glfwGetWindowUserPointer(window));
 		}
 
-		int 		width = 1920;
-		int			height = 1080;
+		int 				width = 1920;
+		int					height = 1080;
 		GLFWwindow*	window;
 };

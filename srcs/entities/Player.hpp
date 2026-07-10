@@ -21,19 +21,31 @@ class Player {
         Player(const Player&) = delete;
         Player& operator=(const Player&) = delete;
 
-        void move(int dx, int dy);
-        void render(unsigned int shaderProgram) const;
+        void    move(int dx, int dy);
+        void    render(unsigned int shaderProgram) const;
 
-        int gridX() const { return _gridX; }
-        int gridY() const { return _gridY; }
+        int     gridX() const { return _gridX; }
+        int     gridY() const { return _gridY; }
+
+        // Bomb-count rule: how many the player is allowed to have live
+        // at once. Player only tracks the COUNT 
+        // it never owns the actual Bomb objects
+        // PlayingState does (see Bomb.hpp).
+        bool    canPlaceBomb() const  { return _activeBombs < _maxBombs; }
+        void    onBombPlaced()        { ++_activeBombs; }
+        void    onBombExploded()      { if (_activeBombs > 0) --_activeBombs; }
 
     private:
-        void updateOffset();
+        void    updateOffset();
 
-        const QuadMesh& _mesh;
+        // See Bomb.hpp for why this is a pointer, not a reference.
+        const QuadMesh* _mesh;
 
-        int   _gridX, _gridY;
-        int   _gridCols, _gridRows;
-        float _offsetX = 0.0f, _offsetY = 0.0f;
-        float _scaleX, _scaleY;
+        int     _gridX, _gridY;
+        int     _gridCols, _gridRows;
+        float   _offsetX = 0.0f, _offsetY = 0.0f;
+        float   _scaleX, _scaleY;
+
+        int     _maxBombs   = 1;
+        int     _activeBombs = 0;
 };

@@ -1,5 +1,6 @@
 // #include <bomberman.hpp>
 #include <memory>
+// #include <GLFW/glfw3.h>
 #include "window/Window.hpp"
 #include "window/GlfwInputHandler.hpp"
 #include "render/QuadMesh.hpp"
@@ -33,9 +34,13 @@ int main(int argc, char **argv) {
 
         glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
 
+        double lastTime = glfwGetTime();
         while (!w.shouldClose()) {
+            double now = glfwGetTime();
+            float  dt  = static_cast<float>(now - lastTime);
+            lastTime   = now;
             w.pollEvents();
-            app.update(0.0f); // placeholder until entities need real delta time
+            app.update(dt);
             glClear(GL_COLOR_BUFFER_BIT);
             app.render();
             w.swapBuffers();

@@ -14,14 +14,13 @@ class Shader {
         Shader(const Shader&) = delete;
         Shader& operator=(const Shader&) = delete;
 
-        void         use() const;
-        unsigned int id() const { return _program; }
-
-        void setUniform2f(const char* name, float x, float y) const;
+        void            use() const;
+        unsigned int    id() const { return _program; }
+        void            setUniform2f(const char* name, float x, float y) const;
+        
     private:
-        int getUniformLocation(const std::string& name) const;
-        mutable std::unordered_map<std::string, int> _uniformCache;
-        unsigned int compileStage(unsigned int type, const char* src, const char* stageName);
-
-        unsigned int _program;
+        int             getUniformLocation(const std::string& name) const;
+        mutable         std::unordered_map<std::string, int> _uniformCache;
+        unsigned int    compileStage(unsigned int type, const char* src, const char* stageName);
+        unsigned int    _program;
 };

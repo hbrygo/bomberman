@@ -13,11 +13,11 @@ class KeyBindings {
     public:
         KeyBindings(); // populates defaults
 
-        void bind(int key, InputAction action) { _map[key] = action; }
-        void unbind(int key)                   { _map.erase(key); }
+        void    bind(int key, InputAction action) { _map[key] = action; }
+        void    unbind(int key)                   { _map.erase(key); }
 
         // Returns true and fills `out` if `key` is currently bound.
-        bool resolve(int key, InputAction& out) const;
+        bool    resolve(int key, InputAction& out) const;
 
     private:
         std::unordered_map<int, InputAction> _map;

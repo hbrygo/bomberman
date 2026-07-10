@@ -15,7 +15,7 @@ class QuadMesh {
         QuadMesh(const QuadMesh&) = delete;
         QuadMesh& operator=(const QuadMesh&) = delete;
 
-        void draw() const;
+        void    draw() const;
 
     private:
         unsigned int _vao = 0, _vbo = 0, _ebo = 0;

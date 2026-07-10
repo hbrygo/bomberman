@@ -6,12 +6,12 @@ KeyBindings::KeyBindings() {
     bind(GLFW_KEY_S,      InputAction::MoveDown);
     bind(GLFW_KEY_A,      InputAction::MoveLeft);
     bind(GLFW_KEY_D,      InputAction::MoveRight);
-    // bind(GLFW_KEY_SPACE,  InputAction::PlaceBomb);
+    bind(GLFW_KEY_SPACE,  InputAction::PlaceBomb);
     bind(GLFW_KEY_I,      InputAction::MoveUpP2);
     bind(GLFW_KEY_K,      InputAction::MoveDownP2);
     bind(GLFW_KEY_J,      InputAction::MoveLeftP2);
     bind(GLFW_KEY_L,      InputAction::MoveRightP2);
-    // bind(GLFW_KEY_SPACE,  InputAction::PlaceBombP2);
+    bind(GLFW_KEY_ENTER,  InputAction::PlaceBombP2);
     bind(GLFW_KEY_ESCAPE, InputAction::Quit);
 }
 
