@@ -18,6 +18,10 @@ The project automatically builds the bundled GLFW library located in `libs/glfw`
 
 ```
 # Clone the repository
+git clone https://github.com/hbrygo/bomberman.git
+cd bomberman
+
+# Clone with Glfw library
 git clone --recurse https://github.com/hbrygo/bomberman.git
 cd bomberman
 
